@@ -1,0 +1,60 @@
+import java.util.jar.Attributes.Name
+
+allprojects {
+    group = 'net.woggioni'
+
+    version = getProperty('jshadow.version')
+
+    repositories {
+        mavenCentral()
+    }
+
+    pluginManager.withPlugin('java') {
+        java {
+            withJavadocJar()
+            withSourcesJar()
+        }
+
+        dependencies {
+            testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: getProperty('junit.jupiter.version')
+            testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: getProperty('junit.jupiter.version')
+            testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: getProperty('junit.jupiter.version')
+        }
+
+        jar {
+            manifest {
+                attributes[Name.SPECIFICATION_TITLE.toString()] = 'jshadow'
+                attributes[Name.SPECIFICATION_VERSION.toString()] = project.version
+            }
+        }
+
+        tasks.withType(Test).configureEach {
+            useJUnitPlatform()
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+    }
+
+    pluginManager.withPlugin('net.woggioni.gradle.lombok') {
+        lombok {
+            version = getProperty('lombok.version')
+        }
+    }
+
+    pluginManager.withPlugin('maven-publish') {
+        publishing {
+            repositories {
+                maven {
+                    url = "https://mvn.woggioni.net/"
+                }
+            }
+        }
+    }
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.BIN
+    gradleVersion = getProperty("gradle.version")
+}

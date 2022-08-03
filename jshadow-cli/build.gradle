@@ -1,0 +1,33 @@
+plugins {
+    id 'maven-publish'
+    id 'java-library'
+    id 'net.woggioni.gradle.lombok'
+    id 'net.woggioni.gradle.envelope'
+    id 'net.woggioni.gradle.multi-release-jar'
+}
+
+ext {
+    setProperty('jpms.module.name', 'net.woggioni.jshadow.cli')
+}
+
+dependencies {
+    implementation project(':jshadow-lib')
+    implementation group: 'info.picocli', name: 'picocli', version: getProperty('picocli.version')
+}
+
+envelopeJar {
+    mainClass = 'net.woggioni.jshadow.cli.Main'
+    mainModule = 'net.woggioni.jshadow.cli'
+}
+
+java {
+    modularity.inferModulePath = true
+}
+
+publishing {
+    publications {
+        myDistribution(MavenPublication) {
+            artifact envelopeJar
+        }
+    }
+}
