@@ -11,11 +11,23 @@ pluginManagement {
         }
         gradlePluginPortal()
     }
+}
 
-    plugins {
-        id 'net.woggioni.gradle.envelope' version getProperty('gradle.envelope.plugin.version')
-        id 'net.woggioni.gradle.multi-release-jar' version getProperty('gradle.multi-release-jar.plugin.version')
-        id 'net.woggioni.gradle.lombok' version getProperty('gradle.lombok.plugin.version')
+dependencyResolutionManagement {
+    versionCatalogs {
+        repositories {
+            maven {
+                url = "https://woggioni.net/mvn"
+                content {
+                    includeGroup 'com.lys'
+                }
+            }
+        }
+
+        libs {
+            from group: "com.lys", name: 'lys-catalog', version: getProperty('lys.catalog.version')
+            version("slf4j", "1.7.36")
+        }
     }
 }
 

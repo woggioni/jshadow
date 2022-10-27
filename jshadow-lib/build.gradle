@@ -1,8 +1,8 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.woggioni.gradle.lombok'
-    id 'net.woggioni.gradle.multi-release-jar'
+    alias(libs.plugins.lombok)
+    alias(libs.plugins.multi.release.jar)
 }
 
 ext {
